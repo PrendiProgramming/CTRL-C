@@ -1,7 +1,7 @@
-from datasets.gsv_dataset import build_gsv
-from datasets.sun360_dataset import build_sun360
-from datasets.hlw_dataset import build_hlw
-from datasets.image_dataset import build_image
+from .gsv_dataset import build_gsv
+from .sun360_dataset import build_sun360
+from .hlw_dataset import build_hlw
+from .image_dataset import build_image
 
 def build_gsv_dataset(image_set, cfg):
     return build_gsv(image_set, cfg)

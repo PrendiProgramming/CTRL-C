@@ -14,7 +14,7 @@ import csv
 import matplotlib.pyplot as plt
 from pylsd import lsd
 
-import datasets.transforms as T
+from .transforms import Compose, ToTensor, Normalize
 
 def center_crop(img):
     sz = img.shape[0:2]
@@ -179,9 +179,9 @@ class ImageDataset(Dataset):
         return len(self.list_filename)   
 
 def make_transform():
-    return T.Compose([
-        T.ToTensor(),
-        T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    return Compose([
+        ToTensor(),
+        Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]) 
 
 def build_image(image_path, cfg):

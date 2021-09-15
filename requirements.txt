@@ -4,7 +4,6 @@ torchvision>=0.6.0
 scipy
 scikit-image
 tqdm
-opencv-python
 matplotlib
 yacs
 tensorboard

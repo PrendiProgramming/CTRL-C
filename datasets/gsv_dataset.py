@@ -13,7 +13,7 @@ import json
 import csv
 import matplotlib.pyplot as plt
 
-import datasets.transforms as T
+from .transforms import Compose, ToTensor, Normalize
 
 def eul2rotm_ypr(euler):
     R_x = np.array([[1, 0, 0],
@@ -63,16 +63,16 @@ def segs2lines_np(segs):
     lines = np.cross(p1, p2)
     return normalize_safe_np(lines)
 
-def sample_segs_np(segs, num_sample, use_prob=True):    
+def sample_segs_np(segs, num_sample, use_prob=True):
     num_segs = len(segs)
     sampled_segs = np.zeros([num_sample, 4], dtype=np.float32)
     mask = np.zeros([num_sample, 1], dtype=np.float32)
     if num_sample > num_segs:
         sampled_segs[:num_segs] = segs
         mask[:num_segs] = np.ones([num_segs, 1], dtype=np.float32)
-    else:    
+    else:
         lengths = LA.norm(segs[:,2:] - segs[:,:2], axis=-1)
-        prob = lengths/np.sum(lengths)        
+        prob = lengths/np.sum(lengths)
         idxs = np.random.choice(segs.shape[0], num_sample, replace=True, p=prob)
         sampled_segs = segs[idxs]
         mask = np.ones([num_sample, 1], dtype=np.float32)
@@ -241,9 +241,9 @@ class GSVDataset(Dataset):
         return len(self.list_img_filename)   
 
 def make_transform():
-    return T.Compose([
-        T.ToTensor(),
-        T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    return Compose([
+        ToTensor(),
+        Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]) 
 
 def build_gsv(image_set, cfg):

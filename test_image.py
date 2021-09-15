@@ -114,7 +114,10 @@ def main(cfg, sample_path):
             zvp = outputs['pred_zvp'].to('cpu')[0].numpy()
             fovy = outputs['pred_fovy'].to('cpu')[0].numpy()
             hl = outputs['pred_hl'].to('cpu')[0].numpy()
-
+            fovy = np.squeeze(fovy)
+            up_vector = compute_up_vector(zvp, fovy)
+            pitch, roll = decompose_up_vector(up_vector)
+            print("pitch {} roll {} fov {}".format(pitch, roll, fovy))
             img_sz = targets[0]['org_sz']
             crop_sz = targets[0]['crop_sz']
             filename = targets[0]['filename']
@@ -128,7 +131,7 @@ def main(cfg, sample_path):
 
             img = targets[0]['org_img']
             extent=[-img_sz[1]/2, img_sz[1]/2, img_sz[0]/2, -img_sz[0]/2]
-            
+
             plt.figure(figsize=(5,5))                
             plt.imshow(img, extent=extent)
             plt.plot([hl_pts[0][0], hl_pts[1][0]], 
